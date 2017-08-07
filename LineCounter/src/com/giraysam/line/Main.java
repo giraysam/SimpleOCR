@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            File file = new File("./test2.jpg");
+            File file = new File("./sample.jpg");
             BufferedImage originalImage = ImageIO.read(file);
             LineCounter lineCounter = new LineCounter(originalImage);
             List<Line> lineList = lineCounter.getLineList();
