@@ -18,8 +18,8 @@ class LineCounter {
         width = bufferedImage.getWidth();
         height = bufferedImage.getHeight();
 
-        BufferedImage grayImage = makeGray(bufferedImage);
-        BufferedImage binaryImage = makeBinary(grayImage);
+        BufferedImage grayImage = Utils.makeGray(bufferedImage);
+        BufferedImage binaryImage = Utils.makeBinary(grayImage);
         smearingX = smearingX(binaryImage);
     }
 
@@ -51,51 +51,6 @@ class LineCounter {
         return lineList;
     }
 
-    private BufferedImage makeGray(BufferedImage bufferedImage) {
-        int x, y, red, green, blue, grayLevel, gray;
-
-        for (y=0; y < height; y++) {
-            for (x=0; x < width; x++) {
-                Color color = new Color(bufferedImage.getRGB(x, y));
-                red = color.getRed();
-                green = color.getGreen();
-                blue = color.getBlue();
-
-                grayLevel = (red + green + blue) / 3;
-
-                gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
-
-                bufferedImage.setRGB(x, y, gray);
-            }
-        }
-
-        return bufferedImage;
-    }
-
-    private BufferedImage makeBinary(BufferedImage bufferedImage) {
-        int x, y, red, green, blue, avg;
-
-        for (y=0; y < height; y++) {
-            for (x=0; x < width; x++) {
-                Color color = new Color(bufferedImage.getRGB(x, y));
-                red = color.getRed();
-                green = color.getGreen();
-                blue = color.getBlue();
-
-                avg = (red + green + blue) / 3;
-
-                if (avg > 120) {
-                    bufferedImage.setRGB(x, y, Color.WHITE.getRGB());
-                }
-                else {
-                    bufferedImage.setRGB(x, y, Color.BLACK.getRGB());
-                }
-            }
-        }
-
-        return bufferedImage;
-    }
-
     private BufferedImage smearingX(BufferedImage bufferedImage) {
         int x, y, red;
         BufferedImage smearingXImage = Utils.copyImage(bufferedImage);
@@ -105,9 +60,9 @@ class LineCounter {
 
                 red = new Color(bufferedImage.getRGB(x, y)).getRed();
 
-                for (int k = 0; k < width ; k++) {
-                    if (red == 0) {
-                        smearingXImage.setRGB(k, y, Color.BLACK.getRGB());
+                if (red == 0) {
+                    for (int k = 0; k < width ; k++) {
+                            smearingXImage.setRGB(k, y, Color.BLACK.getRGB());
                     }
                 }
             }

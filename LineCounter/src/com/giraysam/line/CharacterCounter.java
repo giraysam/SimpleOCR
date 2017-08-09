@@ -1,10 +1,8 @@
 package com.giraysam.line;
 
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +26,9 @@ public class CharacterCounter {
                 for (y=0; y < line.getLineImage().getHeight(); y++) {
                     red = new Color(line.getLineImage().getRGB(x, y)).getRed();
 
-                    for (int k = 0; k < line.getLineImage().getHeight() ; k++) {
-                        if (red == 0) {
-                            lineCopy.setRGB(x, k, Color.BLACK.getRGB());
+                    if (red == 0) {
+                        for (int k = 0; k < line.getLineImage().getHeight() ; k++) {
+                                lineCopy.setRGB(x, k, Color.BLACK.getRGB());
                         }
                     }
                 }
