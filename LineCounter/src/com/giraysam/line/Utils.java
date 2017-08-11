@@ -1,10 +1,15 @@
 package com.giraysam.line;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class Utils {
+
+    private static int threshold = 255;
 
     public static BufferedImage copyImage(BufferedImage source){
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
@@ -15,7 +20,7 @@ public class Utils {
     }
 
     public static BufferedImage makeGray(BufferedImage bufferedImage) {
-        int x, y, red, green, blue, grayLevel, gray;
+        int x, y, red, green, blue, grayLevel, gray, min = 255, max = 0;
 
         for (y=0; y < bufferedImage.getHeight(); y++) {
             for (x=0; x < bufferedImage.getWidth(); x++) {
@@ -26,16 +31,30 @@ public class Utils {
 
                 grayLevel = (red + green + blue) / 3;
 
+                if (grayLevel < min) {
+                    min = grayLevel;
+                }
+
+                if (grayLevel > max) {
+                    max = grayLevel;
+                }
+
                 gray = (grayLevel << 16) + (grayLevel << 8) + grayLevel;
 
                 bufferedImage.setRGB(x, y, gray);
             }
         }
 
+        threshold = (min + max) / 2;
+
         return bufferedImage;
     }
 
-    public static BufferedImage makeBinary(BufferedImage bufferedImage) {
+    public static int getThreshold() {
+        return threshold;
+    }
+
+    public static BufferedImage makeBinary(BufferedImage bufferedImage, int threshold) throws IOException {
         int x, y, red, green, blue, avg;
 
         for (y=0; y < bufferedImage.getHeight(); y++) {
@@ -47,7 +66,8 @@ public class Utils {
 
                 avg = (red + green + blue) / 3;
 
-                if (avg > 120) {
+
+                if (avg > threshold) {
                     bufferedImage.setRGB(x, y, Color.WHITE.getRGB());
                 }
                 else {
@@ -55,6 +75,8 @@ public class Utils {
                 }
             }
         }
+
+        ImageIO.write(bufferedImage, "jpg", new File("binary.jpg"));
 
         return bufferedImage;
     }

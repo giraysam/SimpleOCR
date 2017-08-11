@@ -19,7 +19,7 @@ class LineCounter {
         height = bufferedImage.getHeight();
 
         BufferedImage grayImage = Utils.makeGray(bufferedImage);
-        BufferedImage binaryImage = Utils.makeBinary(grayImage);
+        BufferedImage binaryImage = Utils.makeBinary(grayImage, Utils.getThreshold());
         smearingX = smearingX(binaryImage);
     }
 
